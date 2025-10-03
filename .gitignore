@@ -1,0 +1,15 @@
+# Entornos virtuales de Python
+venv/
+.venv/
+env/
+*.env
+.vscode/
+
+# Archivos de caché y compilados de Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Archivos generados por paquetes/IDE comunes
+.DS_Store # Mac OS X
+*~ # Archivos de respaldo

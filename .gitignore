@@ -16,3 +16,6 @@ credentials.json
 # Editor
 .vscode/
 .idea/
+
+# Archivo binario de ngrok (solo para desarrollo local)
+ngrok.exe

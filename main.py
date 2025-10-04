@@ -30,22 +30,33 @@ sessions = {}  # key = phone_number, value = {"state": str, "data": {...}, "last
 # ---- Google Sheets: inicializar cliente ----
 # Reemplaza la línea "gc = gspread.service_account(filename=GOOGLE_CREDS)"
 
+# PERMISOS NECESARIOS: Definir los permisos que gspread necesita
+# Este es el scope estándar para lectura y escritura de Google Sheets.
+SCOPES = [
+    'https://www.googleapis.com/auth/spreadsheets'
+]
+
+gc = None
+sheet = None
+
+# ---- Google Sheets: inicializar cliente ----
 try:
-    # 1. Cargar el contenido JSON de la variable GOOGLE_CREDS
     if GOOGLE_CREDS:
         info = json.loads(GOOGLE_CREDS) 
-
-        # 2. Crear las credenciales a partir del diccionario de Python (info)
-        creds = service_account.Credentials.from_service_account_info(info)
-
-        # 3. Autorizar gspread
+        
+        # CAMBIO CLAVE: Añadir el parámetro 'scopes' al crear las credenciales
+        creds = service_account.Credentials.from_service_account_info(
+            info,
+            scopes=SCOPES  # <--- ¡Añadido!
+        )
+        
         gc = gspread.authorize(creds)
         sheet = gc.open(SHEET_NAME).sheet1
+        
+        print("INFO: Conexión a Google Sheets exitosa.")
     else:
-        print("ADVERTENCIA: GOOGLE_CREDS no está configurado, la app fallará en Sheets.")
-        # Puedes inicializar gc y sheet a None si no son críticos para el startup
-        # gc = None; sheet = None
-
+        print("ADVERTENCIA: GOOGLE_CREDENTIALS_JSON no está configurado.")
+        
 except Exception as e:
     print(f"ERROR FATAL al inicializar Google Sheets (JSON/Auth): {e}")
     raise RuntimeError("Fallo crítico al conectar con Google Sheets.")
@@ -94,7 +105,7 @@ def save_reservation_to_sheet(phone, name, date_str, time_str, note=""):
     sheet.append_row(row)
 
 # ---- Webhook verification endpoint (GET) ----
-@app.get("/webhook")
+@app.get("/")
 async def webhook_verify(
     hub_mode: str = Query(None, alias="hub.mode"),
     hub_challenge: str = Query(None, alias="hub.challenge"),

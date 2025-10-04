@@ -1,15 +1,18 @@
-# Entornos virtuales de Python
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+env/
 venv/
 .venv/
-env/
-*.env
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Environments & secrets
+.env
+credentials.json
+
+# Editor
 .vscode/
-
-# Archivos de caché y compilados de Python
-__pycache__/
-*.pyc
-*.pyo
-
-# Archivos generados por paquetes/IDE comunes
-.DS_Store # Mac OS X
-*~ # Archivos de respaldo
+.idea/

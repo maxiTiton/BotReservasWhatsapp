@@ -9,6 +9,7 @@ import requests
 import gspread
 from dotenv import load_dotenv
 from fastapi import FastAPI, Request, HTTPException, Response, Query
+from google.oauth2 import service_account
 
 load_dotenv()
 

@@ -17,7 +17,7 @@ PHONE_NUMBER_ID = os.getenv("WHATSAPP_PHONE_NUMBER_ID")
 ACCESS_TOKEN = os.getenv("WHATSAPP_ACCESS_TOKEN")
 VERIFY_TOKEN = os.getenv("VERIFY_TOKEN")
 APP_SECRET = os.getenv("APP_SECRET")          # usado para validar firma X-Hub-Signature-256
-GOOGLE_CREDS = os.getenv("GOOGLE_CREDENTIALS_JSON", "credentials.json")
+GOOGLE_CREDS = os.getenv("GOOGLE_CREDENTIALS_JSON")
 SHEET_NAME = os.getenv("SHEET_NAME", "ReservasBot")
 
 # Iniciamos FastAPI

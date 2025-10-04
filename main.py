@@ -28,8 +28,28 @@ app = FastAPI(title="WhatsApp Reservations Bot - FastAPI MVP")
 sessions = {}  # key = phone_number, value = {"state": str, "data": {...}, "last_ts": epoch}
 
 # ---- Google Sheets: inicializar cliente ----
-gc = gspread.service_account(filename=GOOGLE_CREDS)   # usa service account json
-sheet = gc.open(SHEET_NAME).sheet1  # asume hoja 1; crear headers manualmente en la Sheet
+# Reemplaza la línea "gc = gspread.service_account(filename=GOOGLE_CREDS)"
+
+try:
+    # 1. Cargar el contenido JSON de la variable GOOGLE_CREDS
+    if GOOGLE_CREDS:
+        info = json.loads(GOOGLE_CREDS) 
+
+        # 2. Crear las credenciales a partir del diccionario de Python (info)
+        creds = service_account.Credentials.from_service_account_info(info)
+
+        # 3. Autorizar gspread
+        gc = gspread.authorize(creds)
+        sheet = gc.open(SHEET_NAME).sheet1
+    else:
+        print("ADVERTENCIA: GOOGLE_CREDS no está configurado, la app fallará en Sheets.")
+        # Puedes inicializar gc y sheet a None si no son críticos para el startup
+        # gc = None; sheet = None
+
+except Exception as e:
+    print(f"ERROR FATAL al inicializar Google Sheets (JSON/Auth): {e}")
+    raise RuntimeError("Fallo crítico al conectar con Google Sheets.")
+
 
 # ---- Helpers ----
 WHATSAPP_API_URL = f"https://graph.facebook.com/v17.0/{PHONE_NUMBER_ID}/messages"
